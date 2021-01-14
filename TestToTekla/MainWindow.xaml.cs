@@ -33,7 +33,7 @@ namespace TestToTekla
         }
 
         /// <summary>
-        /// Попотка создания балки в TS
+        /// Попытка создания балки в TS
         /// </summary>
         /// <returns>true - операция выполнена успешна. false - инверсия true</returns>
         private bool IsCreate()
