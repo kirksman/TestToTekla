@@ -1,73 +1,51 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Tekla.Structures.Model;
+using TestToTekla.classes;
+using s =  System.Windows.Shapes;
 
 namespace TestToTekla
 {
     public partial class MainWindow : Window
     {
-        Model model;
+        
 
         public MainWindow()
         {
             InitializeComponent();
-
-            btn_Creater.IsEnabled = false;
-            this.Title = "Test to TS";
-
-            btn_ConnectToTekla.Click += (s, e) => { model = new Model(); IsConnect(); };
-            btn_Creater.Click += (s,e) => 
+            s.Polygon polygon = new s.Polygon();
+            
+            Coordinates coordinates = new Coordinates(new PointS() { X = 0, Y = 0 }, Math.PI / 2, 50, 4);
+            foreach (PointS item in coordinates.Points)
             {
-                if (IsCreate()){MessageBox.Show(
-                    "Create ok",
-                    "IsCreate",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);}
-                else { MessageBox.Show(
-                    "Not creating",
-                    "IsCreate",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error); ; }
-            };
+                polygon.Points.Add(new Point() { X = item.X, Y = item.Y });
+            }
+
+            polygon.Fill = Brushes.Red;
+            polygon.Stroke = Brushes.Black;
+            polygon
+
+            polygon.HorizontalAlignment = HorizontalAlignment.Center;
+            polygon.VerticalAlignment = VerticalAlignment.Center;
+
+            MG.Children.Add(polygon);
+
+            
+
             
         }
 
-        /// <summary>
-        /// Попытка создания балки в TS
-        /// </summary>
-        /// <returns>true - операция выполнена успешна. false - инверсия true</returns>
-        private bool IsCreate()
-        {
-            Beam beam = new Beam(Beam.BeamTypeEnum.BEAM);
-            beam.Name = "My beam";
-            beam.Profile.ProfileString = "380*380";
-            beam.Material.MaterialString = "09Г2";
-            beam.Class = "20";
-            beam.StartPoint = new Tekla.Structures.Geometry3d.Point(0, 0, 0);
-            beam.EndPoint = new Tekla.Structures.Geometry3d.Point(3000, 0, 0);
+        
 
-            return beam.Insert();
-        }
+       
 
-        /// <summary>
-        /// Проверка присоединения к TS
-        /// </summary>
-        private void IsConnect()
-        {
-            if (model.GetConnectionStatus()) 
-            {
-                msg_IsConnect.Foreground = Brushes.GreenYellow;
-                msg_IsConnect.Content = "Connect";
-                btn_Creater.IsEnabled = true;
-                 
-            }
-            else 
-            {
-                msg_IsConnect.Foreground = Brushes.Red;
-                msg_IsConnect.Content = "Not connect";
-                btn_Creater.IsEnabled = false;
-               
-            }
-        }
+        
+
+        
+
     }
 }
